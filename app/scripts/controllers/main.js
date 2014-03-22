@@ -29,6 +29,7 @@ angular.module('mortgageApp')
       this.name        = 'Plan ' + Plan.numInstances;
       this.months      = [];
       this.monthValues = [];
+      this.currentYear = 1;
       this.stats       = {};
       this.getDefaultMonth = function() {
         return {
@@ -94,6 +95,13 @@ angular.module('mortgageApp')
         previousMonth = month;
 
         i++;
+      }
+
+      Plan.prototype.monthsForYear = function(year) {
+        year = parseInt(year, 10);
+        return this.months.filter(function(month) {
+          return parseInt(Math.floor((month.i) / 12) + 1, 10) === year;
+        });
       }
 
       this.months = months;

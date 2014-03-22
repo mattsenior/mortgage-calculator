@@ -20,13 +20,15 @@
 
 <div class="row">
   <tabset justified="true">
-    <tab ng-repeat="plan in mortgage.plans">
-      <tab-heading>{{plan.name}}</tab-heading>
+    <tab heading="{{plan.name}}" ng-repeat="plan in mortgage.plans">
         <h1>{{plan.name}}</h1>
         <p>
           <strong><span class="glyphicon glyphicon-time"></span></strong>
           <ng-pluralize count="plan.stats.yearsMonths.years" when="{'0': '', 'one': '1 year', 'other': '{} years'}"></ng-pluralize><span ng-if="plan.stats.yearsMonths.years && plan.stats.yearsMonths.months">, </span><ng-pluralize count="plan.stats.yearsMonths.months" when="{'0': '', 'one': '1 month', 'other': '{} months'}"></ng-pluralize>
         </p>
+
+        <pagination total-items="plan.stats.months" items-per-page="12" direction-links="true" class="pagination-sm" page="plan.currentYear">
+        </pagination>
 
         <table class="table table-condensed table-hover">
           <thead>
@@ -40,7 +42,7 @@
           </thead>
 
           <tbody>
-            <tr ng-repeat="month in plan.months" ng-class="{active: month.explicit}">
+            <tr ng-repeat="month in plan.monthsForYear(plan.currentYear)" ng-class="{active: month.explicit}">
               <td>{{month.i+1}}</td>
 
               <td class="text-right" ng-repeat="prop in ['standardPayment', 'additionalPayment']" ng-class="{success: plan.hasMonthValue(month.i, prop)}">
