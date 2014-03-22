@@ -2,6 +2,7 @@
 
 angular.module('mortgageApp')
   .controller('MainCtrl', ['$scope', function ($scope) {
+    // TODO put into factory
     var mortgage = {
       debt:      250000,
       plans:     [],
@@ -22,6 +23,7 @@ angular.module('mortgageApp')
       mortgage.maxMonths = maxMonths;
     };
 
+    // TODO put into factory
     function Plan(mortgage) {
       Plan.numInstances = (Plan.numInstances || 0) + 1;
 
@@ -97,6 +99,7 @@ angular.module('mortgageApp')
         i++;
       }
 
+      // TODO shouldn’t this be a filter
       Plan.prototype.monthsForYear = function(year) {
         year = parseInt(year, 10);
         return this.months.filter(function(month) {

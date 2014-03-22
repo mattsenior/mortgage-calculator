@@ -27,7 +27,7 @@
           <ng-pluralize count="plan.stats.yearsMonths.years" when="{'0': '', 'one': '1 year', 'other': '{} years'}"></ng-pluralize><span ng-if="plan.stats.yearsMonths.years && plan.stats.yearsMonths.months">, </span><ng-pluralize count="plan.stats.yearsMonths.months" when="{'0': '', 'one': '1 month', 'other': '{} months'}"></ng-pluralize>
         </p>
 
-        <pagination total-items="plan.stats.months" items-per-page="12" direction-links="true" class="pagination-sm" page="plan.currentYear">
+        <pagination total-items="plan.stats.months" items-per-page="12" direction-links="true" boundary-links="true" page="plan.currentYear" max-size="10" rotate="false">
         </pagination>
 
         <table class="table table-condensed table-hover">
