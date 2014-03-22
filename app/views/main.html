@@ -8,7 +8,7 @@
     <div class="form-group">
       <label for="mortgage.debt">Total debt</label>
       <div class="input-group">
-        <span class="input-group-addon">£</span>
+        <span class="input-group-addon"><span class="glyphicon glyphicon-gbp"></span><span class="text-hide">£</span></span>
         <input id="mortgage.debt" class="form-control" type="number" ng-model="mortgage.debt">
         <span class="input-group-btn">
           <button class="btn btn-primary" type="submit" ng-click="go()">Go</button>
@@ -20,7 +20,7 @@
 
 <div class="row" ng-repeat="plan in mortgage.plans">
   <p>
-    <strong>Plan length:</strong>
+    <strong><span class="glyphicon glyphicon-time"></span></strong>
     <ng-pluralize count="plan.stats.yearsMonths.years" when="{'0': '', 'one': '1 year', 'other': '{} years'}"></ng-pluralize><span ng-if="plan.stats.yearsMonths.years && plan.stats.yearsMonths.months">, </span><ng-pluralize count="plan.stats.yearsMonths.months" when="{'0': '', 'one': '1 month', 'other': '{} months'}"></ng-pluralize>
   </p>
 

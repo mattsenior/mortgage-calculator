@@ -3,7 +3,7 @@
 angular.module('mortgageApp')
   .controller('MainCtrl', ['$scope', function ($scope) {
     var mortgage = {
-      debt:  10000,
+      debt:  200000,
       plans: []
     };
 
@@ -13,11 +13,11 @@ angular.module('mortgageApp')
       this.stats  = {}
       this.getDefaultMonth = function() {
         return {
-          explicit:           false,
-          standardPayment:    500,
+          standardPayment:    1000,
           additionalPayment:  0
         };
       }
+      this.recalculate();
     }
 
     Plan.prototype.setDebt = function(debt) {
@@ -104,10 +104,10 @@ angular.module('mortgageApp')
 
     var plan1 = new Plan(mortgage.debt);
 
-    plan1.setMonth(0, {
-      standardPayment:   500,
-      additionalPayment: 100
-    });
+    //plan1.setMonth(0, {
+    //  standardPayment:   1000,
+    //  additionalPayment: 0
+    //});
 
     mortgage.plans.push(plan1);
 
