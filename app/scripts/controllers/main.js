@@ -1,12 +1,15 @@
 'use strict';
 
 angular.module('mortgageApp')
-  .controller('MainCtrl', ['$scope', function ($scope) {
+  .controller('MainCtrl', ['$scope', '$moment', function ($scope, $moment) {
+
     // TODO put into factory
     var mortgage = {
       debt:      250000,
+      start:     $moment(),
+      end:       undefined,
       plans:     [],
-      maxMonths: 0,
+      maxMonths: 0
     };
 
     mortgage.addPlan = function(plan) {
@@ -31,7 +34,6 @@ angular.module('mortgageApp')
       this.name        = 'Plan ' + Plan.numInstances;
       this.months      = [];
       this.monthValues = [];
-      this.currentYear = 1;
       this.stats       = {};
       this.getDefaultMonth = function() {
         return {
@@ -39,6 +41,11 @@ angular.module('mortgageApp')
           additionalPayment:  0
         };
       };
+
+      // Temporary - for display/editing
+      this.currentYear = 1;
+
+      // Init
       this.recalculate();
     }
 
@@ -92,9 +99,12 @@ angular.module('mortgageApp')
 
         month.remainingDebt = remainingDebt;
         month.i             = i;
+        month.date          = this.mortgage.start.clone().add('months', i + 1);
 
         months.push(month);
         previousMonth = month;
+
+        this.mortgage.end = month.date;
 
         i++;
       }
@@ -105,7 +115,7 @@ angular.module('mortgageApp')
         return this.months.filter(function(month) {
           return parseInt(Math.floor((month.i) / 12) + 1, 10) === year;
         });
-      }
+      };
 
       this.months = months;
 
@@ -119,6 +129,8 @@ angular.module('mortgageApp')
         years:  monthCount / 12,
         months: monthCount
       };
+
+      this.stats.wholeYears = Math.ceil(this.stats.years);
 
       this.stats.yearsMonths = {
         years:  Math.floor(this.stats.years),

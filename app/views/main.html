@@ -25,6 +25,7 @@
         <p>
           <strong><span class="glyphicon glyphicon-time"></span></strong>
           <ng-pluralize count="plan.stats.yearsMonths.years" when="{'0': '', 'one': '1 year', 'other': '{} years'}"></ng-pluralize><span ng-if="plan.stats.yearsMonths.years && plan.stats.yearsMonths.months">, </span><ng-pluralize count="plan.stats.yearsMonths.months" when="{'0': '', 'one': '1 month', 'other': '{} months'}"></ng-pluralize>
+          ({{mortgage.start.format('MMMM YYYY')}}—{{mortgage.end.format('MMMM YYYY')}})
         </p>
 
         <pagination total-items="plan.stats.months" items-per-page="12" direction-links="true" boundary-links="true" page="plan.currentYear" max-size="10" rotate="false">
@@ -43,7 +44,7 @@
 
           <tbody>
             <tr ng-repeat="month in plan.monthsForYear(plan.currentYear)" ng-class="{active: month.explicit}">
-              <td>{{month.i+1}}</td>
+              <td>{{month.date.format('MMMM YYYY')}}</td>
 
               <td class="text-right" ng-repeat="prop in ['standardPayment', 'additionalPayment']" ng-class="{success: plan.hasMonthValue(month.i, prop)}">
                 <button class="pull-left btn btn-link btn-xs" ng-if="plan.hasMonthValue(month.i, prop) && !editing(month.i, prop)" ng-click="plan.removeMonthValue(month.i, prop)"><span class="glyphicon glyphicon-remove"></span></button>
