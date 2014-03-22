@@ -14,7 +14,7 @@ angular.module('mortgageApp')
       this.stats       = {};
       this.getDefaultMonth = function() {
         return {
-          standardPayment:    1000,
+          standardPayment:    1200,
           additionalPayment:  0
         };
       };
@@ -113,6 +113,7 @@ angular.module('mortgageApp')
     };
 
     var plan1 = new Plan(mortgage.debt);
+    var plan2 = new Plan(mortgage.debt);
 
     //plan1.setMonthValue(0, 'standardPayment', 5000);
     //plan1.setMonthValue(2, 'additionalPayment', 1000);
@@ -123,6 +124,7 @@ angular.module('mortgageApp')
     //});
 
     mortgage.plans.push(plan1);
+    mortgage.plans.push(plan2);
 
     $scope.mortgage = mortgage;
 
