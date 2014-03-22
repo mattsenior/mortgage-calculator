@@ -1,0 +1,48 @@
+<div class="row header">
+  <h3 class="text-muted">mortgage</h3>
+  <hr>
+</div>
+
+<div class="row">
+  <form role="form">
+    <div class="form-group">
+      <label for="mortgage.debt">Total debt</label>
+      <div class="input-group">
+        <span class="input-group-addon">£</span>
+        <input id="mortgage.debt" class="form-control" type="number" ng-model="mortgage.debt">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="submit" ng-click="go()">Go</button>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="row" ng-repeat="plan in mortgage.plans">
+  <p>
+    <strong>Plan length:</strong>
+    <ng-pluralize count="plan.stats.yearsMonths.years" when="{'0': '', 'one': '1 year', 'other': '{} years'}"></ng-pluralize><span ng-if="plan.stats.yearsMonths.years && plan.stats.yearsMonths.months">, </span><ng-pluralize count="plan.stats.yearsMonths.months" when="{'0': '', 'one': '1 month', 'other': '{} months'}"></ng-pluralize>
+  </p>
+
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th class="text-right">Standard payment</th>
+        <th class="text-right">Overpayment</th>
+        <th class="text-right">Total payment</th>
+        <th class="text-right">Remaining debt</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr ng-repeat="month in plan.months" ng-class="{active: month.explicit}">
+        <td>{{month.i+1}}</td>
+        <td class="text-right">{{month.standardPayment}}</td>
+        <td class="text-right">{{month.additionalPayment}}</td>
+        <td class="text-right">{{month.totalPayment}}</td>
+        <td class="text-right">{{month.remainingDebt}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
