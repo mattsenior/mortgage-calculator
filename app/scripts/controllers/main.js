@@ -3,20 +3,21 @@
 angular.module('mortgageApp')
   .controller('MainCtrl', ['$scope', function ($scope) {
     var mortgage = {
-      debt:  200000,
+      debt:  250000,
       plans: []
     };
 
     function Plan(debt) {
-      this.debt   = debt;
-      this.months = [];
-      this.stats  = {}
+      this.debt        = debt;
+      this.months      = [];
+      this.monthValues = [];
+      this.stats       = {};
       this.getDefaultMonth = function() {
         return {
           standardPayment:    1000,
           additionalPayment:  0
         };
-      }
+      };
       this.recalculate();
     }
 
@@ -25,16 +26,27 @@ angular.module('mortgageApp')
       this.recalculate();
     };
 
-    Plan.prototype.setMonth = function(i, month) {
-
-      month.explicit = true;
-
-      this.months[i] = month;
+    Plan.prototype.setMonthValue = function(i, prop, value) {
+      this.monthValues[i] = this.monthValues[i] || {};
+      this.monthValues[i][prop] = value;
       this.recalculate();
     };
 
-    Plan.prototype.hasMonth = function(i) {
-      if (typeof this.months[i] === 'undefined') {
+    Plan.prototype.removeMonthValue = function(i, prop) {
+      if (!this.hasMonthValue(i, prop)) {
+        return;
+      }
+
+      delete this.monthValues[i][prop];
+      this.recalculate();
+    };
+
+    Plan.prototype.hasMonthValue = function(i, prop) {
+      if (typeof this.monthValues[i] === 'undefined') {
+        return false;
+      }
+
+      if (typeof this.monthValues[i][prop] === 'undefined') {
         return false;
       }
 
@@ -55,11 +67,7 @@ angular.module('mortgageApp')
 
       while (remainingDebt > 0) {
 
-        if (this.hasMonth(i)) {
-          month = this.months[i];
-        } else {
-          month = this.cloneMonth(previousMonth);
-        }
+        month = this.mergeMonths(i, previousMonth);
 
         month.totalPayment  = month.standardPayment + month.additionalPayment;
 

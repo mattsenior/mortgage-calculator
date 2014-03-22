@@ -38,8 +38,10 @@
     <tbody>
       <tr ng-repeat="month in plan.months" ng-class="{active: month.explicit}">
         <td>{{month.i+1}}</td>
-        <td class="text-right">{{month.standardPayment}}</td>
-        <td class="text-right">{{month.additionalPayment}}</td>
+        <td class="text-right" ng-repeat="prop in ['standardPayment', 'additionalPayment']" ng-class="{success: plan.hasMonthValue(month.i, prop)}">
+          {{month[prop]}}
+          <button class="close pull-left" ng-if="plan.hasMonthValue(month.i, prop)" ng-click="plan.removeMonthValue(month.i, prop)">×</button>
+        </td>
         <td class="text-right">{{month.totalPayment}}</td>
         <td class="text-right">{{month.remainingDebt}}</td>
       </tr>
