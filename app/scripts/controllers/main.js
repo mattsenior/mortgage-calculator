@@ -93,8 +93,11 @@ angular.module('mortgageApp')
 
         month = this.mergeMonths(i, previousMonth);
 
-        month.totalPayment  = month.standardPayment + month.additionalPayment;
+        // Total payment for month is standard + additional, or the
+        // remainingDebt if that’s less
+        month.totalPayment = Math.min(remainingDebt, month.standardPayment + month.additionalPayment);
 
+        // Subtract from total
         remainingDebt -= month.totalPayment;
 
         month.remainingDebt = remainingDebt;
