@@ -3,7 +3,8 @@
 angular.module('mortgageApp', [
   'ngSanitize',
   'ngRoute',
-  'xeditable'
+  'xeditable',
+  'ui.bootstrap'
 ])
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);

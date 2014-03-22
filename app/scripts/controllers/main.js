@@ -3,12 +3,30 @@
 angular.module('mortgageApp')
   .controller('MainCtrl', ['$scope', function ($scope) {
     var mortgage = {
-      debt:  250000,
-      plans: []
+      debt:      250000,
+      plans:     [],
+      maxMonths: 0,
     };
 
-    function Plan(debt) {
-      this.debt        = debt;
+    mortgage.addPlan = function(plan) {
+      mortgage.plans.push(plan);
+      mortgage.recalculate();
+    };
+
+    mortgage.recalculate = function() {
+      var maxMonths = 0;
+      angular.forEach(mortgage.plans, function(plan) {
+        maxMonths = Math.max(plan.stats.months, maxMonths);
+      });
+
+      mortgage.maxMonths = maxMonths;
+    };
+
+    function Plan(mortgage) {
+      Plan.numInstances = (Plan.numInstances || 0) + 1;
+
+      this.mortgage    = mortgage;
+      this.name        = 'Plan ' + Plan.numInstances;
       this.months      = [];
       this.monthValues = [];
       this.stats       = {};
@@ -20,11 +38,6 @@ angular.module('mortgageApp')
       };
       this.recalculate();
     }
-
-    Plan.prototype.setDebt = function(debt) {
-      this.debt = debt;
-      this.recalculate();
-    };
 
     Plan.prototype.setMonthValue = function(i, prop, value) {
       this.monthValues[i] = this.monthValues[i] || {};
@@ -55,7 +68,7 @@ angular.module('mortgageApp')
 
     Plan.prototype.recalculate = function() {
       var months          = [];
-      var remainingDebt = this.debt;
+      var remainingDebt = this.mortgage.debt;
 
       if (remainingDebt < 0) {
         throw 'Remaining debt cannot start below 0';
@@ -112,8 +125,8 @@ angular.module('mortgageApp')
       return newMonth;
     };
 
-    var plan1 = new Plan(mortgage.debt);
-    var plan2 = new Plan(mortgage.debt);
+    var plan1 = new Plan(mortgage);
+    var plan2 = new Plan(mortgage);
 
     //plan1.setMonthValue(0, 'standardPayment', 5000);
     //plan1.setMonthValue(2, 'additionalPayment', 1000);
@@ -123,8 +136,8 @@ angular.module('mortgageApp')
     //  additionalPayment: 0
     //});
 
-    mortgage.plans.push(plan1);
-    mortgage.plans.push(plan2);
+    mortgage.addPlan(plan1);
+    mortgage.addPlan(plan2);
 
     $scope.mortgage = mortgage;
 
@@ -142,14 +155,21 @@ angular.module('mortgageApp')
       editing[i][prop] = bool;
     };
 
-    $scope.selectThis = function() {
-      var el = this.$editable.inputEl;
-      setTimeout(function() {
-        el.select();
-      }, 0);
+    $scope.selectThis = function(evt) {
+      if (typeof this.$editable !== 'undefined') {
+        var el = this.$editable.inputEl;
+        setTimeout(function() {
+          el.select();
+        }, 0);
+        return;
+      }
+
+      evt.target.select();
     };
 
     $scope.go = function() {
-      mortgage.plans[0].setDebt(mortgage.debt);
+      angular.forEach(mortgage.plans, function(plan) {
+        plan.recalculate();
+      });
     };
   }]);
