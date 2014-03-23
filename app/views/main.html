@@ -35,8 +35,14 @@
 </div>
 
 <div class="row">
-  <button class="btn btn-default pull-right" ng-click="newPlan()">New Plan</button>
+  <button class="btn btn-default pull-right" ng-click="newPlan()"><span class="glyphicon glyphicon-plus"></span> New Plan</button>
   <tabset justified="false">
+    <tab heading="No plans yet" ng-if="!mortgage.plans.length">
+      <div class="panel panel-default panel-tabtop panel-noplans">
+        <button ng-click="newPlan()" class="btn btn-primary center-block"><span class="glyphicon glyphicon-plus"></span> Create your first plan</button>
+      </div>
+    </tab>
+
     <tab heading="{{plan.name}}" ng-repeat="plan in mortgage.plans" active="plan.active">
       <div class="panel panel-default panel-tabtop">
         <div class="panel-body">
@@ -77,6 +83,8 @@
             </tbody>
           </div>
         </table>
+
+        <button class="btn btn-default" ng-click="removePlan(plan)"><span class="glyphicon glyphicon-trash"></span> Delete plan</button>
     </tab>
   </tabset>
 </div>

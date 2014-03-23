@@ -27,6 +27,17 @@ angular.module('mortgageApp')
       return plan;
     };
 
+    mortgage.removePlan = function(plan) {
+      mortgage.plans = mortgage.plans.filter(function(item) {
+        return item !== plan;
+      });
+
+      // Reset Plan counter if we have no more plans
+      if (!mortgage.plans.length) {
+        Plan.numInstances = 0;
+      }
+    };
+
     mortgage.recalculate = function() {
       var maxMonths = 0;
       angular.forEach(mortgage.plans, function(plan) {
@@ -203,9 +214,13 @@ angular.module('mortgageApp')
       evt.target.select();
     };
 
-    $scope.newPlan = function(plan) {
+    $scope.newPlan = function() {
       var plan = mortgage.newPlan();
       plan.active = true;
+    };
+
+    $scope.removePlan = function(plan) {
+      mortgage.removePlan(plan);
     };
 
     $scope.go = function() {
