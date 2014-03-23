@@ -14,3 +14,9 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
 .nav a {
   cursor: pointer;
 }
+
+.panel-tabtop {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: 0;
+}

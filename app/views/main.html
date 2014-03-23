@@ -35,18 +35,13 @@
 </div>
 
 <div class="row">
-  <button class="btn btn-default" ng-click="newPlan()">New Plan</button>
-</div>
-
-<div class="row">
+  <button class="btn btn-default pull-right" ng-click="newPlan()">New Plan</button>
   <tabset justified="false">
-    <hr>
     <tab heading="{{plan.name}}" ng-repeat="plan in mortgage.plans" active="plan.active">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h1 class="panel-title"><span editable-text="plan.name" onshow="selectThis()">{{plan.name}}</span></h1>
-        </div>
+      <div class="panel panel-default panel-tabtop">
         <div class="panel-body">
+          <h2><span editable-text="plan.name" onshow="selectThis()">{{plan.name}}</span></h1>
+          <br>
           <p>
             <strong><span class="glyphicon glyphicon-time"></span></strong>
             <ng-pluralize count="plan.stats.yearsMonths.years" when="{'0': '', 'one': '1 year', 'other': '{} years'}"></ng-pluralize><span ng-if="plan.stats.yearsMonths.years && plan.stats.yearsMonths.months">, </span><ng-pluralize count="plan.stats.yearsMonths.months" when="{'0': '', 'one': '1 month', 'other': '{} months'}"></ng-pluralize>
