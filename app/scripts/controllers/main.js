@@ -175,19 +175,10 @@ angular.module('mortgageApp')
       return newMonth;
     };
 
-    var plan1 = mortgage.newPlan();
-    var plan2 = mortgage.newPlan();
-
-    //plan1.setMonthValue(0, 'standardPayment', 5000);
-    //plan1.setMonthValue(2, 'additionalPayment', 1000);
-
-    //plan1.setMonth(0, {
-    //  standardPayment:   1000,
-    //  additionalPayment: 0
-    //});
-
+    // Pass mortgage to view
     $scope.mortgage = mortgage;
 
+    // Maintain editing state, for hiding buttons etc
     var editing = [];
     $scope.editing = function(i, prop, bool) {
       if (typeof bool === 'undefined') {
@@ -202,6 +193,7 @@ angular.module('mortgageApp')
       editing[i][prop] = bool;
     };
 
+    // Helper to auto-select text when editing
     $scope.selectThis = function(evt) {
       if (typeof this.$editable !== 'undefined') {
         var el = this.$editable.inputEl;
@@ -214,15 +206,18 @@ angular.module('mortgageApp')
       evt.target.select();
     };
 
+    // Create new plan and set as active tab
     $scope.newPlan = function() {
       var plan = mortgage.newPlan();
       plan.active = true;
     };
 
+    // Remove plan
     $scope.removePlan = function(plan) {
       mortgage.removePlan(plan);
     };
 
+    // Recalculate with new date/total
     $scope.go = function() {
       mortgage.start = $moment(mortgage.startISO8601);
 
