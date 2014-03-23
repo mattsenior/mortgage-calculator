@@ -10,9 +10,12 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
 }
 
 // Ensure pointer without href
-.pagination a,
-.nav a {
-  cursor: pointer;
+.pagination,
+.pager,
+.nav {
+  a {
+    cursor: pointer;
+  }
 }
 
 .panel-tabtop {

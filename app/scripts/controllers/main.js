@@ -5,7 +5,7 @@ angular.module('mortgageApp')
 
     // TODO put into factory
     var mortgage = {
-      debt:         250000,
+      debt:         255845,
       start:        $moment(),
       startISO8601: undefined,
       end:          undefined,
@@ -59,10 +59,15 @@ angular.module('mortgageApp')
       this.months      = [];
       this.monthValues = [];
       this.stats       = {};
+      this.totals      = {
+        interestCharged: 0,
+        totalPayment:    0
+      };
       this.getDefaultMonth = function() {
         return {
           standardPayment:    1200,
-          additionalPayment:  0
+          additionalPayment:  0,
+          interestRate:       4
         };
       };
 
@@ -113,24 +118,49 @@ angular.module('mortgageApp')
       var month;
       var previousMonth = this.getDefaultMonth();
 
+      this.totals.interestCharged = 0;
+      this.totals.totalPayment    = 0;
+      var cumulativeDebtRepayment = 0;
+
       while (remainingDebt > 0 && i < maxMonths) {
 
         month = this.mergeMonths(i, previousMonth);
+        month.i    = i;
+        month.date = this.mortgage.start.clone().add('months', i); // Zero-indexed
+
+        // Calculate interest accumulated during this period
+        var dailyRate = (month.interestRate / 365.25) / 100;
+
+        // Here we’re using the actual number of days in the month
+        //month.interestCharged = dailyRate * month.date.daysInMonth() * remainingDebt;
+        //Here we’re using an average of 365.25 / 12 days in the month
+        month.interestCharged = dailyRate * (365.25 / 12) * remainingDebt;
+
+        this.totals.interestCharged += month.interestCharged;
+        month.cumulativeInterestCharged = this.totals.interestCharged;
+
+        // Add interest to total
+        remainingDebt += month.interestCharged;
 
         // Total payment for month is standard + additional, or the
         // remainingDebt if that’s less
         month.totalPayment = Math.min(remainingDebt, month.standardPayment + month.additionalPayment);
+        this.totals.totalPayment += month.totalPayment;
+        month.cumulativeTotalPayment = this.totals.totalPayment;
+
+        month.debtRepayment = month.totalPayment - month.interestCharged;
+        cumulativeDebtRepayment += month.debtRepayment;
+        month.cumulativeDebtRepayment = cumulativeDebtRepayment;
 
         // Subtract from total
         remainingDebt -= month.totalPayment;
 
         month.remainingDebt = remainingDebt;
-        month.i             = i;
-        month.date          = this.mortgage.start.clone().add('months', i); // Zero-indexed
 
         months.push(month);
         previousMonth = month;
 
+        // Keep track of the last month of the mortgage
         this.mortgage.end = month.date;
 
         i++;
@@ -168,7 +198,7 @@ angular.module('mortgageApp')
     Plan.prototype.mergeMonths = function(i, previousMonth) {
       var newMonth = {};
       var plan     = this;
-      angular.forEach(['standardPayment', 'additionalPayment'], function(prop) {
+      angular.forEach(['standardPayment', 'additionalPayment', 'interestRate'], function(prop) {
         newMonth[prop] = plan.hasMonthValue(i, prop) ? plan.monthValues[i][prop] : previousMonth[prop];
       });
 
@@ -210,6 +240,7 @@ angular.module('mortgageApp')
     $scope.newPlan = function() {
       var plan = mortgage.newPlan();
       plan.active = true;
+      return plan;
     };
 
     // Remove plan
@@ -225,4 +256,11 @@ angular.module('mortgageApp')
         plan.recalculate();
       });
     };
+
+    // Debug setup
+    var plan1 = $scope.newPlan();
+    plan1.setMonthValue(0, 'interestRate', 2.44);
+    plan1.setMonthValue(0, 'standardPayment', 1140.05);
+    plan1.setMonthValue(38, 'interestRate', 5.99);
+    plan1.setMonthValue(38, 'standardPayment', 1584.98);
   }]);
