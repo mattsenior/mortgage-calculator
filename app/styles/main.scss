@@ -25,3 +25,12 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
   padding-top:    $line-height-computed * 2;
   padding-bottom: $line-height-computed * 2;
 }
+
+.plan-table__cell--edited {
+  font-weight: bold;
+  background-color: lighten($brand-primary, 46%);
+
+  .table-hover > tbody > tr:hover > & {
+    background-color: lighten($brand-primary, 40%);
+  }
+}
