@@ -5,57 +5,79 @@
 
 <div class="row">
   <form role="form">
-    <div class="form-group">
-      <label for="mortgage.debt">Total debt</label>
-      <div class="input-group">
-        <span class="input-group-addon"><span class="glyphicon glyphicon-gbp"></span><span class="text-hide">£</span></span>
-        <input id="mortgage.debt" class="form-control" type="number" ng-model="mortgage.debt" ng-click="selectThis($event)">
-        <span class="input-group-btn">
-          <button class="btn btn-primary" type="submit" ng-click="go()">Go</button>
-        </span>
+    <div class="row">
+      <div class="col-xs-5">
+        <label for="mortgage.startISO8601">Start date</label>
+      </div>
+      <div class="col-xs-5">
+        <label for="mortgage.debt">Total debt</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-5">
+        <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+          <input id="mortgage.startISO8601" class="form-control" type="month" required ng-model="mortgage.startISO8601" ng-click="selectThis($event)">
+        </div>
+      </div>
+      <div class="col-xs-5">
+        <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-gbp"></span><span class="text-hide">£</span></span>
+          <input id="mortgage.debt" class="form-control" type="number" ng-model="mortgage.debt" ng-click="selectThis($event)">
+        </div>
+      </div>
+      <div class="col-xs-2">
+        <button class="btn btn-primary btn-block" type="submit" ng-click="go()">Go</button>
       </div>
     </div>
   </form>
+  <hr>
 </div>
 
 <div class="row">
   <tabset justified="true">
+    <hr>
     <tab heading="{{plan.name}}" ng-repeat="plan in mortgage.plans">
-      <h1><span editable-text="plan.name" onshow="selectThis()">{{plan.name}}</span></h1>
-      <p>
-        <strong><span class="glyphicon glyphicon-time"></span></strong>
-        <ng-pluralize count="plan.stats.yearsMonths.years" when="{'0': '', 'one': '1 year', 'other': '{} years'}"></ng-pluralize><span ng-if="plan.stats.yearsMonths.years && plan.stats.yearsMonths.months">, </span><ng-pluralize count="plan.stats.yearsMonths.months" when="{'0': '', 'one': '1 month', 'other': '{} months'}"></ng-pluralize>
-        ({{mortgage.start.format('MMMM YYYY')}}—{{mortgage.end.format('MMMM YYYY')}})
-      </p>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h1 class="panel-title"><span editable-text="plan.name" onshow="selectThis()">{{plan.name}}</span></h1>
+        </div>
+        <div class="panel-body">
+          <p>
+            <strong><span class="glyphicon glyphicon-time"></span></strong>
+            <ng-pluralize count="plan.stats.yearsMonths.years" when="{'0': '', 'one': '1 year', 'other': '{} years'}"></ng-pluralize><span ng-if="plan.stats.yearsMonths.years && plan.stats.yearsMonths.months">, </span><ng-pluralize count="plan.stats.yearsMonths.months" when="{'0': '', 'one': '1 month', 'other': '{} months'}"></ng-pluralize>
+            ({{mortgage.start.format('MMM YYYY')}}—{{mortgage.end.format('MMM YYYY')}})
+          </p>
 
-      <pagination total-items="plan.stats.months" items-per-page="12" direction-links="true" boundary-links="true" page="plan.currentYear" max-size="10" rotate="false">
-      </pagination>
+          <pagination total-items="plan.stats.months" items-per-page="12" direction-links="true" boundary-links="true" page="plan.currentYear" max-size="10" rotate="false">
+          </pagination>
 
-      <table class="table table-condensed table-hover">
-        <thead>
-          <tr>
-            <th>Month</th>
-            <th class="text-right">Standard payment</th>
-            <th class="text-right">Overpayment</th>
-            <th class="text-right">Total payment</th>
-            <th class="text-right">Remaining debt</th>
-          </tr>
-        </thead>
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th class="text-right">Standard payment</th>
+                <th class="text-right">Overpayment</th>
+                <th class="text-right">Total payment</th>
+                <th class="text-right">Remaining debt</th>
+              </tr>
+            </thead>
 
-        <tbody>
-          <tr ng-repeat="month in plan.monthsForYear(plan.currentYear)" ng-class="{active: month.explicit}">
-            <td>{{month.date.format('MMMM YYYY')}}</td>
+            <tbody>
+              <tr ng-repeat="month in plan.monthsForYear(plan.currentYear)" ng-class="{active: month.explicit}">
+                <td>{{month.date.format('MMM YYYY')}}</td>
 
-            <td class="text-right" ng-repeat="prop in ['standardPayment', 'additionalPayment']" ng-class="{success: plan.hasMonthValue(month.i, prop)}">
-              <button class="pull-left btn btn-link btn-xs" ng-if="plan.hasMonthValue(month.i, prop) && !editing(month.i, prop)" ng-click="plan.removeMonthValue(month.i, prop)"><span class="glyphicon glyphicon-remove"></span></button>
-              <span class="text-right" type="number" editable-text="month[prop]" e-style="width: 6em" onaftersave="plan.setMonthValue(month.i, prop, month[prop])" onshow="editing(month.i, prop, true); selectThis()" onhide="editing(month.i, prop, false)">{{month[prop]}}</span>
-            </td>
+                <td class="text-right" ng-repeat="prop in ['standardPayment', 'additionalPayment']" ng-class="{success: plan.hasMonthValue(month.i, prop)}">
+                  <button class="pull-left btn btn-link btn-xs" ng-if="plan.hasMonthValue(month.i, prop) && !editing(month.i, prop)" ng-click="plan.removeMonthValue(month.i, prop)"><span class="glyphicon glyphicon-remove"></span></button>
+                  <span class="text-right" type="number" editable-text="month[prop]" e-style="width: 6em" onaftersave="plan.setMonthValue(month.i, prop, month[prop])" onshow="editing(month.i, prop, true); selectThis()" onhide="editing(month.i, prop, false)">{{month[prop]}}</span>
+                </td>
 
-            <td class="text-right">{{month.totalPayment}}</td>
-            <td class="text-right">{{month.remainingDebt}}</td>
-          </tr>
-        </tbody>
-      </table>
+                <td class="text-right">{{month.totalPayment}}</td>
+                <td class="text-right">{{month.remainingDebt}}</td>
+              </tr>
+            </tbody>
+          </div>
+        </table>
     </tab>
   </tabset>
 </div>

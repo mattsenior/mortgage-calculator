@@ -5,12 +5,15 @@ angular.module('mortgageApp')
 
     // TODO put into factory
     var mortgage = {
-      debt:      250000,
-      start:     $moment(),
-      end:       undefined,
-      plans:     [],
-      maxMonths: 0
+      debt:         250000,
+      start:        $moment(),
+      startISO8601: undefined,
+      end:          undefined,
+      plans:        [],
+      maxMonths:    0
     };
+
+    mortgage.startISO8601 = mortgage.start.format('YYYY-MM');
 
     mortgage.addPlan = function(plan) {
       mortgage.plans.push(plan);
@@ -85,7 +88,7 @@ angular.module('mortgageApp')
       }
 
       var i = 0;
-      var maxMonths = 200 * 12;
+      var maxMonths = 1000 * 12;
       var month;
       var previousMonth = this.getDefaultMonth();
 
@@ -102,7 +105,7 @@ angular.module('mortgageApp')
 
         month.remainingDebt = remainingDebt;
         month.i             = i;
-        month.date          = this.mortgage.start.clone().add('months', i + 1);
+        month.date          = this.mortgage.start.clone().add('months', i); // Zero-indexed
 
         months.push(month);
         previousMonth = month;
@@ -194,6 +197,8 @@ angular.module('mortgageApp')
     };
 
     $scope.go = function() {
+      mortgage.start = $moment(mortgage.startISO8601);
+
       angular.forEach(mortgage.plans, function(plan) {
         plan.recalculate();
       });
