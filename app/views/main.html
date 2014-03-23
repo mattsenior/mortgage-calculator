@@ -35,9 +35,13 @@
 </div>
 
 <div class="row">
-  <tabset justified="true">
+  <button class="btn btn-default" ng-click="newPlan()">New Plan</button>
+</div>
+
+<div class="row">
+  <tabset justified="false">
     <hr>
-    <tab heading="{{plan.name}}" ng-repeat="plan in mortgage.plans">
+    <tab heading="{{plan.name}}" ng-repeat="plan in mortgage.plans" active="plan.active">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h1 class="panel-title"><span editable-text="plan.name" onshow="selectThis()">{{plan.name}}</span></h1>

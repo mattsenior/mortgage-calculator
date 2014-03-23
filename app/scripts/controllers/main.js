@@ -20,6 +20,13 @@ angular.module('mortgageApp')
       mortgage.recalculate();
     };
 
+    mortgage.newPlan = function() {
+      var plan = new Plan(mortgage);
+      mortgage.addPlan(plan);
+
+      return plan;
+    };
+
     mortgage.recalculate = function() {
       var maxMonths = 0;
       angular.forEach(mortgage.plans, function(plan) {
@@ -29,12 +36,15 @@ angular.module('mortgageApp')
       mortgage.maxMonths = maxMonths;
     };
 
+    // TODO don’t send the mortgage into the plan
     // TODO put into factory
     function Plan(mortgage) {
       Plan.numInstances = (Plan.numInstances || 0) + 1;
 
       this.mortgage    = mortgage;
-      this.name        = 'Plan ' + Plan.numInstances;
+      this.i           = Plan.numInstances - 1;
+      this.name        = 'Plan ' + (this.i + 1);
+      this.unseen      = true;
       this.months      = [];
       this.monthValues = [];
       this.stats       = {};
@@ -154,8 +164,8 @@ angular.module('mortgageApp')
       return newMonth;
     };
 
-    var plan1 = new Plan(mortgage);
-    var plan2 = new Plan(mortgage);
+    var plan1 = mortgage.newPlan();
+    var plan2 = mortgage.newPlan();
 
     //plan1.setMonthValue(0, 'standardPayment', 5000);
     //plan1.setMonthValue(2, 'additionalPayment', 1000);
@@ -164,9 +174,6 @@ angular.module('mortgageApp')
     //  standardPayment:   1000,
     //  additionalPayment: 0
     //});
-
-    mortgage.addPlan(plan1);
-    mortgage.addPlan(plan2);
 
     $scope.mortgage = mortgage;
 
@@ -194,6 +201,11 @@ angular.module('mortgageApp')
       }
 
       evt.target.select();
+    };
+
+    $scope.newPlan = function(plan) {
+      var plan = mortgage.newPlan();
+      plan.active = true;
     };
 
     $scope.go = function() {
