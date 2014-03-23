@@ -9,6 +9,20 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
     padding: 0.2em 0;
 }
 
+// Don’t remove the 2px on last-child tr in thead
+.panel {
+  > .table-bordered,
+  > .table-responsive > .table-bordered {
+    > thead {
+      > tr {
+        &:last-child > th {
+          border-bottom: 2px solid $table-border-color;
+        }
+      }
+    }
+  }
+}
+
 // Ensure pointer without href
 .pagination,
 .pager,
