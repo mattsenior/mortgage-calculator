@@ -93,51 +93,55 @@
               </ul>
             </div>
           </div>
+        </div>
 
-          <table class="table table-condensed table-hover table-bordered">
-            <thead>
-              <tr>
-                <th rowspan="2" class="text-center">Month</th>
-                <th rowspan="2" class="text-center"><abbr title="Interest Rate">IR</abbr> %</th>
-                <th rowspan="2" class="text-center">Regular<br>payment</th>
-                <th rowspan="2" class="text-center">Extra</th>
-                <th colspan="3" class="text-center">This month</th>
-                <th colspan="3" class="text-center">Running totals</th>
-                <th rowspan="2" class="text-center">Remaining<br>debt</th>
-              </tr>
-              <tr>
-                <th class="text-center text-info"><span class="glyphicon glyphicon-arrow-right"></span><span class="sr-only">Total payment this month (£)</span></th>
-                <th class="text-center text-danger"><span class="glyphicon glyphicon-arrow-up"></span><span class="sr-only">Interest charged this month (£)</span></th>
-                <th class="text-center text-success"><span class="glyphicon glyphicon-arrow-down"></span><span class="sr-only">Debt paid off this month (£)</span></th>
-                <th class="text-center text-info"><span class="glyphicon glyphicon-arrow-right"></span><span class="sr-only">Total payment so far (£)</span></th>
-                <th class="text-center text-danger"><span class="glyphicon glyphicon-arrow-up"></span><span class="sr-only">Interest charged so far (£)</span></th>
-                <th class="text-center text-success"><span class="glyphicon glyphicon-arrow-down"></span><span class="sr-only">Debt paid off so far (£)</span></th>
-              </tr>
-            </thead>
+        <table class="table table-condensed table-hover table-bordered">
+          <thead>
+            <tr>
+              <th rowspan="2" class="text-center">Month</th>
+              <th rowspan="2" class="text-center"><abbr title="Interest Rate">IR</abbr> %</th>
+              <th rowspan="2" class="text-center">Regular<br>payment</th>
+              <th rowspan="2" class="text-center">Extra</th>
+              <th colspan="3" class="text-center">This month</th>
+              <th colspan="3" class="text-center">Running totals</th>
+              <th rowspan="2" class="text-center">Remaining<br>debt</th>
+            </tr>
+            <tr>
+              <th class="text-center text-info"><span class="glyphicon glyphicon-arrow-right" tooltip="Total payment this month (£)"></span></th>
+              <th class="text-center text-danger"><span class="glyphicon glyphicon-arrow-up" tooltip="Interest charged this month (£)"></span></th>
+              <th class="text-center text-success"><span class="glyphicon glyphicon-arrow-down" tooltip="Debt paid off this month (£)"></span></th>
+              <th class="text-center text-info"><span class="glyphicon glyphicon-arrow-right" tooltip="Total payment so far (£)"></span></th>
+              <th class="text-center text-danger"><span class="glyphicon glyphicon-arrow-up" tooltip="Interest charged so far (£)"></span></th>
+              <th class="text-center text-success"><span class="glyphicon glyphicon-arrow-down" tooltip="Debt paid off so far (£)"></span></th>
+            </tr>
+          </thead>
 
-            <tbody>
-              <tr ng-repeat="month in plan.monthsForYear(plan.currentYear)" ng-class="{active: month.explicit}">
-                <td class="text-center">{{month.date.format('MMM YYYY')}}</td>
+          <tbody>
+            <tr ng-repeat="month in plan.monthsForYear(plan.currentYear)" ng-class="{active: month.explicit}">
+              <td class="text-center">{{month.date.format('MMM YYYY')}}</td>
 
-                <!-- TODO custom directive for editable value field -->
-                <td class="text-center" ng-repeat="prop in ['interestRate', 'standardPayment', 'additionalPayment']" ng-class="{'plan-table__cell--edited': plan.hasMonthValue(month.i, prop)}">
-                  <button class="pull-left btn btn-link btn-xs" ng-if="plan.hasMonthValue(month.i, prop) && !editing(month.i, prop)" ng-click="plan.removeMonthValue(month.i, prop)"><span class="glyphicon glyphicon-remove"></span></button>
-                  <span class="text-center" type="number" editable-text="month[prop]" e-style="width: 6em" onaftersave="plan.setMonthValue(month.i, prop, month[prop])" onshow="editing(month.i, prop, true); selectThis()" onhide="editing(month.i, prop, false)">{{month[prop]}}</span>
-                </td>
+              <!-- TODO custom directive for editable value field -->
+              <td class="text-center" ng-repeat="prop in ['interestRate', 'standardPayment', 'additionalPayment']" ng-class="{'plan-table__cell--edited': plan.hasMonthValue(month.i, prop)}">
+                <button class="pull-left btn btn-link btn-xs" ng-if="plan.hasMonthValue(month.i, prop) && !editing(month.i, prop)" ng-click="plan.removeMonthValue(month.i, prop)"><span class="glyphicon glyphicon-remove"></span></button>
+                <span class="text-center" type="number" editable-text="month[prop]" e-style="width: 6em" onaftersave="plan.setMonthValue(month.i, prop, month[prop])" onshow="editing(month.i, prop, true); selectThis()" onhide="editing(month.i, prop, false)">{{month[prop]}}</span>
+              </td>
 
-                <td class="text-center">{{month.totalPayment|number:2}}</td>
-                <td class="text-center">{{month.interestCharged|number:2}}</td>
-                <td class="text-center">{{month.debtRepayment|number:2}}</td>
-                <td class="text-center">{{month.cumulativeTotalPayment|number:2}}</td>
-                <td class="text-center">{{month.cumulativeInterestCharged|number:2}}</td>
-                <td class="text-center">{{month.cumulativeDebtRepayment|number:2}}</td>
-                <td class="text-center">{{month.remainingDebt|number:2}}</td>
-              </tr>
-            </tbody>
-          </div>
-        </table>
+              <td class="text-center">{{month.totalPayment|number:2}}</td>
+              <td class="text-center">{{month.interestCharged|number:2}}</td>
+              <td class="text-center">{{month.debtRepayment|number:2}}</td>
+              <td class="text-center">{{month.cumulativeTotalPayment|number:2}}</td>
+              <td class="text-center">{{month.cumulativeInterestCharged|number:2}}</td>
+              <td class="text-center">{{month.cumulativeDebtRepayment|number:2}}</td>
+              <td class="text-center">{{month.remainingDebt|number:2}}</td>
+            </tr>
+          </tbody>
+        </div>
+      </table>
+
+      <div class="panel-footer">
 
         <button class="btn btn-default" ng-click="removePlan(plan)"><span class="glyphicon glyphicon-trash"></span> Delete plan</button>
+      </div>
     </tab>
   </tabset>
 </div>
