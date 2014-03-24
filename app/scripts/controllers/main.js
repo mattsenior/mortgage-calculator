@@ -10,7 +10,11 @@ angular.module('mortgageApp')
       startISO8601: undefined,
       end:          undefined,
       plans:        [],
-      maxMonths:    0
+      max: {
+        months:          0,
+        interestCharged: 0,
+        totalPayment:    0
+      }
     };
 
     mortgage.startISO8601 = mortgage.start.format('YYYY-MM');
@@ -39,12 +43,18 @@ angular.module('mortgageApp')
     };
 
     mortgage.recalculate = function() {
-      var maxMonths = 0;
-      angular.forEach(mortgage.plans, function(plan) {
-        maxMonths = Math.max(plan.stats.months, maxMonths);
-      });
+      // Reset totals
+      mortgage.max = {
+        months:          0,
+        interestCharged: 0,
+        totalPayment:    0
+      };
 
-      mortgage.maxMonths = maxMonths;
+      angular.forEach(mortgage.plans, function(plan) {
+        mortgage.max.months          = Math.max(plan.stats.months, mortgage.max.months);
+        mortgage.max.interestCharged = Math.max(plan.totals.interestCharged, mortgage.max.interestCharged);
+        mortgage.max.totalPayment    = Math.max(plan.totals.totalPayment, mortgage.max.totalPayment);
+      });
     };
 
     // TODO don’t send the mortgage into the plan
@@ -175,6 +185,9 @@ angular.module('mortgageApp')
       this.months = months;
 
       this.recalculateStats();
+
+      // TODO instruct mortgage to recalculate stats in a better way
+      mortgage.recalculate();
     };
 
     Plan.prototype.recalculateStats = function() {

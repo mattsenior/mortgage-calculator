@@ -37,6 +37,39 @@
 <div class="row">
   <button class="btn btn-default pull-right" ng-click="newPlan()"><span class="glyphicon glyphicon-plus"></span> New Plan</button>
   <tabset justified="false">
+    <tab heading="Overview">
+      <div class="panel panel-default panel-tabtop">
+        <div class="panel-body">
+          <h2>Overview</h2>
+        </div>
+
+        <table class="table table-condensed table-striped table-hover table-bordered">
+          <thead>
+            <tr>
+              <td>Plan</td>
+              <td>Duration</td>
+              <td>Totals</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="plan in mortgage.plans">
+              <td>{{plan.name}}</td>
+              <td>
+                <progress max="mortgage.max.totalPayment">
+                  <bar value="plan.totals.totalPayment" type="info"><span>£{{plan.totals.totalPayment|number:2}}</span></bar>
+                </progress>
+                <progress max="mortgage.max.totalPayment">
+                  <bar value="mortgage.debt" type="success"><span>£{{mortgage.debt|number:2}}</span></bar>
+                  <bar value="plan.totals.interestCharged" type="danger"><span>£{{plan.totals.interestCharged|number:2}}</span></bar>
+                </progress>
+              </td>
+              <td>{{plan.name}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </tab>
+
     <tab heading="No plans yet" ng-if="!mortgage.plans.length">
       <div class="panel panel-default panel-tabtop panel-noplans">
         <button ng-click="newPlan()" class="btn btn-primary center-block"><span class="glyphicon glyphicon-plus"></span> Create your first plan</button>
