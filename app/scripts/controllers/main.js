@@ -55,7 +55,6 @@ angular.module('mortgageApp')
       this.mortgage    = mortgage;
       this.i           = Plan.numInstances - 1;
       this.name        = 'Plan ' + (this.i + 1);
-      this.unseen      = true;
       this.months      = [];
       this.monthValues = [];
       this.stats       = {};
@@ -106,7 +105,7 @@ angular.module('mortgageApp')
     };
 
     Plan.prototype.recalculate = function() {
-      var months          = [];
+      var months        = [];
       var remainingDebt = this.mortgage.debt;
 
       if (remainingDebt < 0) {
@@ -124,9 +123,9 @@ angular.module('mortgageApp')
 
       while (remainingDebt > 0 && i < maxMonths) {
 
-        month = this.mergeMonths(i, previousMonth);
+        month      = this.mergeMonths(i, previousMonth);
         month.i    = i;
-        month.date = this.mortgage.start.clone().add('months', i); // Zero-indexed
+        month.date = this.mortgage.start.clone().add('months', i);
 
         // Calculate interest accumulated during this period
         var dailyRate = (month.interestRate / 365.25) / 100;
@@ -144,17 +143,16 @@ angular.module('mortgageApp')
 
         // Total payment for month is standard + additional, or the
         // remainingDebt if that’s less
-        month.totalPayment = Math.min(remainingDebt, month.standardPayment + month.additionalPayment);
-        this.totals.totalPayment += month.totalPayment;
+        month.totalPayment           = Math.min(remainingDebt, month.standardPayment + month.additionalPayment);
+        this.totals.totalPayment    += month.totalPayment;
         month.cumulativeTotalPayment = this.totals.totalPayment;
 
-        month.debtRepayment = month.totalPayment - month.interestCharged;
-        cumulativeDebtRepayment += month.debtRepayment;
+        month.debtRepayment           = month.totalPayment - month.interestCharged;
+        cumulativeDebtRepayment      += month.debtRepayment;
         month.cumulativeDebtRepayment = cumulativeDebtRepayment;
 
         // Subtract from total
-        remainingDebt -= month.totalPayment;
-
+        remainingDebt      -= month.totalPayment;
         month.remainingDebt = remainingDebt;
 
         months.push(month);
