@@ -664,8 +664,10 @@ $link-hover-color:      $link-color;
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-$web-font:                "//fonts.googleapis.com/css?family=Lato:400,700,900,400italic";
-$font-family-sans-serif:  "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+//$web-font:                "//fonts.googleapis.com/css?family=Lato:400,700,900,400italic";
+$web-font:                "//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700,800";
+//$font-family-sans-serif:  "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-sans-serif:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;

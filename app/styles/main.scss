@@ -37,22 +37,22 @@ $icon-font-path: "/bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap
   }
 }
 
-.panel-tabtop {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-top: 0;
-}
-
-.panel-noplans {
-  padding-top:    $line-height-computed * 2;
-  padding-bottom: $line-height-computed * 2;
-}
-
+//.panel-tabtop {
+//  border-top-left-radius: 0;
+//  border-top-right-radius: 0;
+//  border-top: 0;
+//}
+//
+//.panel-noplans {
+//  padding-top:    $line-height-computed * 2;
+//  padding-bottom: $line-height-computed * 2;
+//}
+//
 .plan-table__cell--edited {
   font-weight: bold;
-  background-color: lighten($brand-primary, 46%);
+  //background-color: lighten($brand-primary, 46%);
 
-  .table-hover > tbody > tr:hover > & {
-    background-color: lighten($brand-primary, 40%);
-  }
+  //.table-hover > tbody > tr:hover > & {
+  //  background-color: lighten($brand-primary, 40%);
+  //}
 }
